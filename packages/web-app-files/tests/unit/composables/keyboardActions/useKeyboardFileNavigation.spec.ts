@@ -93,4 +93,75 @@ describe('useKeyboardFileNavigation', () => {
     expect(store.selectedIds).toEqual(['1'])
     expect(selectionStates.every((state) => state.length > 0)).toBe(true)
   })
+
+  it.each([
+    {
+      name: 'select files on shift up',
+      start: '5',
+      actions: ['ArrowUp'],
+      expected: ['5', '4', '3', '2', '1']
+    },
+    {
+      name: 'select files on shift down',
+      start: '1',
+      actions: ['ArrowDown'],
+      expected: ['1', '2', '3', '4', '5']
+    },
+    {
+      name: 'select and deselect files on shift up or down',
+      start: '5',
+      actions: ['ArrowUp', 'ArrowDown'],
+      expected: ['5']
+    },
+    {
+      name: 'select files on shift left',
+      start: '3',
+      actions: ['ArrowLeft', 'ArrowLeft'],
+      expected: ['3', '2', '1']
+    },
+    {
+      name: 'select files on shift right',
+      start: '1',
+      actions: ['ArrowRight', 'ArrowRight'],
+      expected: ['1', '2', '3']
+    },
+    {
+      name: 'select and deselect files on shift left or right',
+      start: '3',
+      actions: ['ArrowRight', 'ArrowLeft', 'ArrowLeft', 'ArrowLeft', 'ArrowRight', 'ArrowLeft'],
+      expected: ['3', '2', '1']
+    }
+  ])('$name', async ({ start, actions, expected }) => {
+    // Arrange
+    const resources = [...Array(5).keys()].map((key) => createResource((key + 1).toString()))
+    const tiles = resources.map((r) => ({
+      getAttribute: () => r.id,
+      getBoundingClientRect: () => ({ x: (+r.id % 4) * 100 })
+    }))
+    createMockStore({
+      stubActions: false,
+      resourcesStore: { resources }
+    })
+    vi.spyOn(document, 'querySelectorAll').mockReturnValue(tiles as any)
+    const store = useResourcesStore()
+    const keyActions = createKeyActions()
+    const viewMode = ref(FolderViewModeConstants.name.tiles)
+
+    // Act
+    store.addSelection(start)
+
+    useKeyboardFileNavigation(keyActions, ref(resources), viewMode)
+
+    const selectionStates: string[][] = []
+    store.$subscribe(() => {
+      selectionStates.push([...store.selectedIds])
+    })
+
+    actions.forEach((action) => triggerAction(keyActions, action, 'Shift'))
+    await nextTick()
+    await nextTick()
+
+    expect(store.selectedIds).toEqual(expected)
+    expect(selectionStates.every((state) => state.length > 0)).toBe(true)
+  })
 })

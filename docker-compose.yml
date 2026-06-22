@@ -61,7 +61,7 @@ x-opencloud-server: &opencloud-service
     PROXY_TLS: 'false'
 
     # TIKA
-    SEARCH_EXTRACTOR_TYPE: 'tika'
+    SEARCH_EXTRACTOR_TYPE: 'basic'
     SEARCH_EXTRACTOR_TIKA_TIKA_URL: 'http://host.docker.internal:9998'
     SEARCH_EXTRACTOR_CS3SOURCE_INSECURE: 'true'
 
