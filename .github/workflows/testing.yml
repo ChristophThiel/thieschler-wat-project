@@ -27,7 +27,6 @@ jobs:
     runs-on: self-hosted
     services:
       webdav:
-        container_name: ${{ github.sha }}
         image: bytemark/webdav
         ports:
           - 60080:80
@@ -35,13 +34,13 @@ jobs:
           AUTH_TYPE: Basic
           USERNAME: alice
           PASSWORD: secret1234
+        volumes:
+          - ${{ github.workspace }}/tests/integration/test-data:/var/lib/dav/dav
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Copy test data to container
-        run: docker cp ./tests/integration/test-data/. ${{ github.sha }}:/var/lib/dav/dav/
       - name: Install dependencies
         run: pnpm install
       - name: Run integration tests
