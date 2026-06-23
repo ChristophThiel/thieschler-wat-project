@@ -5,7 +5,7 @@ describe('ocs capabilities', () => {
  const client = axios.create({
     headers: { Authorization: 'Basic ' + Buffer.from('admin:admin').toString('base64') }
   })
-  const ocsClient = ocs('http://localhost:9200', client)
+  const ocsClient = ocs(process.env.OCS_BASE_URL || 'http://localhost:9200', client)
 
   it('reports the backend as an installed OpenCloud product', async () => {
     // Arrange
