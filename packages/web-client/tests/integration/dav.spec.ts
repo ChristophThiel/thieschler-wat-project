@@ -15,7 +15,11 @@ describe('dav', () => {
     let actual: DavResult
 
     // Act
-    actual = await dav.copy(toCopy, copied)
+    try {
+      actual = await dav.copy(toCopy, copied)
+    } catch (error) {
+      console.log(error)
+    }
 
     // Assert
     expect(actual.status).toStrictEqual(201)
@@ -27,7 +31,11 @@ describe('dav', () => {
     let actual: DavResult
 
     // Act
-    actual = await dav.delete(file)
+    try {
+      actual = await dav.delete(file)
+    } catch (error) {
+      console.log(error)
+    }
 
     // Assert
     expect(actual.status).toStrictEqual(204)
@@ -40,7 +48,11 @@ describe('dav', () => {
     let actual: DavResult
 
     // Act
-    actual = await dav.copy(toMove, moved)
+    try {
+      actual = await dav.copy(toMove, moved)
+    } catch (error) {
+      console.log(error)
+    }
 
     // Assert
     expect(actual.status).toStrictEqual(201)
@@ -55,7 +67,11 @@ describe('dav', () => {
     let actual: DavResult
 
     // Act
-    actual = await dav.put(file.path, file.content)
+    try {
+      actual = await dav.put(file.path, file.content)
+    } catch (error) {
+      console.log(error)
+    }
 
     // Assert
     expect(actual.status).toStrictEqual(201)
