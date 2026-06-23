@@ -7,7 +7,6 @@ on:
 
 jobs:
   unit:
-    if: false
     runs-on: self-hosted
     steps:
       - name: Checkout
@@ -47,13 +46,9 @@ jobs:
         run: pnpm install
       - name: Run integration tests
         run: pnpm test:integration
-      - name: Upload coverage
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ github.sha }}
-          path: coverage/
 
   e2e:
+    if: false # Disabled until e2e tests are implemented
     runs-on: self-hosted
     steps:
       - name: Checkout
@@ -62,6 +57,7 @@ jobs:
           fetch-depth: 0
 
   load:
+    if: false # Disabled until load tests are implemented
     runs-on: self-hosted
     steps:
       - name: Checkout
