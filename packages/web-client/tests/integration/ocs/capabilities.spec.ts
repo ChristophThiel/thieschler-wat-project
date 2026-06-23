@@ -2,12 +2,10 @@ import axios from 'axios'
 import { Capabilities, ocs } from '../../../src/ocs'
 
 describe('ocs capabilities', () => {
-  const client = axios.create({
-    headers: {
-      Authorization: 'Basic ' + Buffer.from('alice:secret1234').toString('base64')
-    }
+ const client = axios.create({
+    headers: { Authorization: 'Basic ' + Buffer.from('admin:admin').toString('base64') }
   })
-  const ocsClient = ocs('http://localhost:60080', client)
+  const ocsClient = ocs('http://localhost:9200', client)
 
   it('reports the backend as an installed OpenCloud product', async () => {
     // Arrange

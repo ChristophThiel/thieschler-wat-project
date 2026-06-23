@@ -42,10 +42,38 @@ jobs:
           fetch-depth: 0
       - name: Copy test data to container
         run: docker cp ./tests/integration/test-data webdav:/var/lib/dav/data/dav/
+      - name: Start OpenCloud backend
+        run: |
+          docker rm -f opencloud || true
+          docker run -d --name opencloud \
+            -e OC_INSECURE=true \
+            -e OC_URL=http://localhost:9200 \
+            -e PROXY_TLS=false \
+            -e PROXY_ENABLE_BASIC_AUTH=true \
+            -e IDM_ADMIN_PASSWORD=admin \
+            -e IDM_CREATE_DEMO_USERS=true \
+            -p 9200:9200 \
+            --entrypoint /bin/sh \
+            opencloudeu/opencloud-rolling:daily \
+            -c "opencloud init || true && opencloud server"
+      - name: Wait for OpenCloud to be ready
+        run: |
+          for i in $(seq 1 60); do
+            curl -fsu admin:admin "http://localhost:9200/ocs/v1.php/cloud/capabilities?format=json" >/dev/null \
+              && echo "OpenCloud is up" && exit 0
+            echo "waiting for OpenCloud... ($i)"
+            sleep 3
+          done
+          echo "OpenCloud did not become ready in time"
+          docker logs opencloud
+          exit 1
       - name: Install dependencies
         run: pnpm install
       - name: Run integration tests
         run: pnpm test:integration
+      - name: Stop OpenCloud backend
+        if: always()
+        run: docker rm -f opencloud || true
 
   e2e:
     if: false # Disabled until e2e tests are implemented
