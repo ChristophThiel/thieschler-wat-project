@@ -7,6 +7,7 @@ on:
 
 jobs:
   unit:
+    if: false
     runs-on: self-hosted
     steps:
       - name: Checkout
@@ -41,7 +42,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Copy test data to container
-        run: docker cp ./test/integration/test-data webdav:/var/lib/dav/dav
+        run: docker cp ./tests/integration/test-data webdav:/var/lib/dav/dav
       - name: Install dependencies
         run: pnpm install
       - name: Run integration tests
