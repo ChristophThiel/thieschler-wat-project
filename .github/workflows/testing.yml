@@ -44,7 +44,7 @@ jobs:
       - name: Copy test data to container
         run: docker cp ./tests/integration/test-data webdav:/var/lib/dav
       - name: Debug step
-        run: docker exec webdav ls /var/lib/dav/dav
+        run: docker exec webdav ls /var/lib/dav
       - name: Install dependencies
         run: pnpm install
       - name: Run integration tests
