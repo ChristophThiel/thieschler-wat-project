@@ -23,7 +23,6 @@ export default defineConfig({
     clearMocks: true,
     pool: 'threads',
     include: ['**/integration/*.spec.ts'],
-    setupFiles: ['@vitest/web-worker'],
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
