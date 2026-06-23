@@ -22,7 +22,7 @@ export default defineConfig({
     environment: 'happy-dom',
     clearMocks: true,
     pool: 'threads',
-    include: ['**/integration/*.spec.ts'],
+    include: ['**/integration/**/*.spec.ts'],
     exclude: [
       '**/node_modules/**',
       '**/dist/**',

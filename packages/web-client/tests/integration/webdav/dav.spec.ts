@@ -1,4 +1,4 @@
-import { DAV, DavResult } from '../../src/webdav/client'
+import { DAV, DavResult } from '../../../src/webdav/client'
 
 describe('dav', () => {
   const dav = new DAV({
