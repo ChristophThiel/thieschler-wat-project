@@ -43,6 +43,8 @@ jobs:
           fetch-depth: 0
       - name: Copy test data to container
         run: docker cp ./tests/integration/test-data webdav:/var/lib/dav/dav
+      - name: Debug step
+        run: docker exec -it webdav ls /var/lib/dav/dav
       - name: Install dependencies
         run: pnpm install
       - name: Run integration tests
