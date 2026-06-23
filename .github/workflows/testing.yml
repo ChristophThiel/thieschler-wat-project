@@ -34,13 +34,14 @@ jobs:
           AUTH_TYPE: Basic
           USERNAME: alice
           PASSWORD: secret1234
-        volumes:
-          - ${{ github.workspace }}/tests/integration/test-data:/var/lib/dav/dav
+        options: --name webdav
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Copy test data to container
+        run: docker cp ./test/integration/test-data webdav:/var/lib/dav/dav
       - name: Install dependencies
         run: pnpm install
       - name: Run integration tests
