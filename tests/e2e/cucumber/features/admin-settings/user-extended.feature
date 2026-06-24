@@ -1,7 +1,8 @@
 @wat
 Feature: User extended
   As an admin
-  I want to change a user's role so their permissions match their responsibilities
+  I want to manage users' roles and remove accounts
+  so that access stays aligned with each user's responsibilities
 
   Scenario: admin changes a user's role
     Given "Admin" creates following user using API
@@ -24,3 +25,22 @@ Feature: User extended
       | user   |
       | Michel |
     And "Admin" logs out
+
+  Scenario: a deleted user can no longer log in
+    Given "Admin" creates following users using API
+      | id     |
+      | Michel |
+    And "Admin" logs in
+    And "Admin" opens the "admin-settings" app
+    And "Admin" navigates to the users management page
+    And "Admin" deletes the following user using the context menu
+      | user   |
+      | Michel |
+    Then "Admin" should not see the following users
+      | user   |
+      | Michel |
+    And "Admin" logs out
+    Then "Michel" fails to log in
+
+
+
