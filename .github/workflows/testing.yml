@@ -101,7 +101,6 @@ jobs:
         run: pnpm test:e2e:wat:webkit 'tests/e2e/cucumber/**/*.feature'
 
   load:
-    if: false # Disabled until load tests are implemented
     runs-on: self-hosted
     steps:
       - name: Checkout
