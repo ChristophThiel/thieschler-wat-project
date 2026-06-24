@@ -2,7 +2,7 @@
 
 OpenCloud Web ist das Frontend für die Plattform OpenCloud. Obwohl diese mit OpenCloud ausgeliefert wird, ist das Frontend eigenständig verwendbar.
 
-Die Plattform OpenCloud ist eine quelloffene und selbstständig bereistellbare Alternative zu Diensten wie Google Drive oder Dropbox.
+Die Plattform OpenCloud ist eine quelloffene und selbstständig bereitellbare Alternative zu Diensten wie Google Drive oder Dropbox.
 
 # Test Setup
 

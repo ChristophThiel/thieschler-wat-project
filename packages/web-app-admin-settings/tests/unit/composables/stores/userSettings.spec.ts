@@ -13,8 +13,13 @@ describe.runIf(process.env.WAT === 'true')('useUserSettingsStore', () => {
     it('replaces the users list', () => {
       getWrapper({
         setup: (instance) => {
+          //arrange
           const users = [mock<User>({ id: '1' }), mock<User>({ id: '2' })]
+
+          //act
           instance.setUsers(users)
+
+          //assert
           expect(instance.users).toEqual(users)
         }
       })
@@ -25,8 +30,13 @@ describe.runIf(process.env.WAT === 'true')('useUserSettingsStore', () => {
     it('adds a user that does not exist yet', () => {
       getWrapper({
         setup: (instance) => {
+          //arrange
           const user = mock<User>({ id: '1' })
+
+          //act
           instance.upsertUser(user)
+
+          //assert
           expect(instance.users).toEqual([user])
         }
       })
@@ -34,8 +44,13 @@ describe.runIf(process.env.WAT === 'true')('useUserSettingsStore', () => {
     it('merges into an existing user instead of duplicating', () => {
       getWrapper({
         setup: (instance) => {
+          //arrange
           instance.setUsers([mock<User>({ id: '1', displayName: 'old' })])
+
+          //act
           instance.upsertUser(mock<User>({ id: '1', displayName: 'new' }))
+
+          //assert
           expect(instance.users.length).toBe(1)
           expect(instance.users[0].displayName).toBe('new')
         }
@@ -47,9 +62,14 @@ describe.runIf(process.env.WAT === 'true')('useUserSettingsStore', () => {
     it('removes only the given users by id', () => {
       getWrapper({
         setup: (instance) => {
+          //arrange
           const keep = mock<User>({ id: '1' })
+
+          //act
           instance.setUsers([keep, mock<User>({ id: '2' })])
           instance.removeUsers([mock<User>({ id: '2' })])
+
+          //assert
           expect(instance.users).toEqual([keep])
         }
       })
@@ -60,9 +80,14 @@ describe.runIf(process.env.WAT === 'true')('useUserSettingsStore', () => {
     it('clears users and selectedUsers', () => {
       getWrapper({
         setup: (instance) => {
+          //arrange
           instance.setUsers([mock<User>({ id: '1' })])
+
+          //act
           instance.addSelectedUser(mock<User>({ id: '1' }))
           instance.reset()
+
+          //assert
           expect(instance.users).toEqual([])
           expect(instance.selectedUsers).toEqual([])
         }
