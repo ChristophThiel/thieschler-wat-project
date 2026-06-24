@@ -1,3 +1,11 @@
+# Mitglieder
+## Christoph Thiel
+## Michel Tischler
+
+# Eingesetzte KI-Werkzeuge
+## Claude
+## Copilot
+
 # OpenCloud Web
 
 OpenCloud Web ist das Frontend für die Plattform OpenCloud. Obwohl diese mit OpenCloud ausgeliefert wird, ist das Frontend eigenständig verwendbar.
@@ -63,6 +71,39 @@ Hier kommt noch `it.each` zum Einsatz, welche eine mehrfache Ausführung des Tes
 
 Da diese Funktion mit `querySelectorAll` arbeitet, wurde hier der Rückgabewert beeinflusst. Dies erfolgt über `vi.spyOn` und `mockReturnValue`.
 
+### capabilities.spec.ts
+
+Diese Klasse testet mehrere Methoden des UserSettings-Stores der Composables von
+web-app-admin.
+
+#### Vorbereitung
+
+Vor jedem Test wird die beforeEach-Methode aufgerufen, welche einen neuen, leeren Pinia-Container aufsetzt und sie als aktive markiert (damit jeder Unit-Test hier einen isolierten Speicher-Status bekommt und nicht von Veränderungen eines anderen Tests betroffen ist)
+
+#### getWrapper
+
+Da Pinia(composables) normalerweise innerhalb einer Setup-Vue-Komponente laufen, kann man userSettingsStore nicht direkt aufrufen. Hierfür wurde eine eigene getWrapper-Methode erstellt, welche den Vue-Kontext bereitstellt, den Sotre instatiert.
+
+#### setUsers
+
+Diese Methode testet, ob die setUsers die gesamte gesamte Liste durch die angegebenen User ersetzt.
+
+#### upsertUser - Add
+
+Diese Methode prüft, ob sich die Liste der Users um einen angegebenen User verändert, wenn ein neuer User hinzugefügt wird.
+
+#### upsertUser - Update
+
+Diese Methode prüft ob die Liste der Users nicht erweitert, sondern nur geupdated wird, wenn der angegebene User (geprüft durch id) bereits existiert.
+
+#### removeUsers
+
+Diese Methode prüft, ob nur die mit der Id angegebenen User aus der Liste entfernt werden.
+
+#### reset 
+
+Diese Methode prüft, ob durch Aufruf der reset-Methode die User-Liste geleert und auch der ausgewählte Benutzer entselektiert wird.
+
 ## Integration Tests
 
 Ausführung erfolgt durch `pnpm test:integration:wat`. Es wurde die Arrange-Act-Assert Struktur eingehalten.
@@ -80,6 +121,12 @@ Schnittstelle zwischen Anwendung und WebDAV Server. Überprüft, ob die jeweilig
 
 Damit diese Tests die tatsächliche Kommunikation prüft, wird ein einfacher WebDAV Server mit Beispieldaten aufgesetzt. Dadurch kann auf Mocks vollständig verzichtet werden.
 
+### capabilities.spec.ts
+
+Schnittstelle zwischen Anwendung und OpenCloud-Backend über die OCS-API.
+Überprüft, ob das Backend die erwarteten Capabilities korrekt meldet – etwa, dass das Produkt installiert ist, sich als OpenCloud identifiziert, die Spaces-Funktion aktiviert ist und gültige Versionsinformationen vorliegen.
+Damit diese Tests die tatsächliche Kommunikation prüfen, wird eine echte OpenCloud-Instanz angesprochen
+
 ## E2E Tests
 
 Ausführung erfolgt durch `pnpm test:e2e:wat:<BROWSER>`. Die Browser Chromium, Firefox und Webkit stehen zur Auswahl.
@@ -93,6 +140,10 @@ Ausführung erfolgt durch `pnpm test:e2e:wat:<BROWSER>`. Die Browser Chromium, F
 
 Dieses in Gherkin verfasste Feature testet das Herunterladen einer Resource über das Kontextmenü, sowie das Herunterladen einer fehlenden Resource.
 
+### user-extended.feature
+
+Dieses File verwendet ebenfalls Gherkin. Hierbei wird getestet, ob ein Administrator die Rolle eines Users ändern und anschließend danach filtern kann. Außerdem wird getestet, dass wenn ein Admin einen User löscht, er diesen nicht nur in seiner Ansicht nicht mehr sieht, sondern der Benutzer auch nicht mehr anmelden kann.
+
 ## Load Tests
 
 Ausführung erfolgt durch `k6 run tests/load/*.js`.
@@ -105,6 +156,11 @@ Ausführung erfolgt durch `k6 run tests/load/*.js`.
 ### get-file.js
 
 Bei diesem Load Test wird zuerst das Skript tests/load/scripts/prepare-get-file.sh ausgeführt. Dieses Skript stellt sicher, dass alles notwendige für den Test bereit ist. Zuerst wird eine Datei beim Benutzer "Dennis" angelegt. Diese erstellte Datei wird dann über einen Link öffentlich geteilt. Auf diesen Link schickt dann k6 die Requests.
+
+### get-capabilities.js
+
+Dieser Load Test führt get-Requests auf die Capabilities mit folgenden Optionen aus: Es gibt insgesamt 3 stages, welche ein Lastprofil über die Zeit (mithilfe von virtuel Users (=VU)) darstellen sollen. Zuerst 15s von 0 auf 10 VUs, dann 30s lang bei 10 VUs halten und anschließend 15s lang wieder auf 0 herunterfahren. Damit der Test auch noch zu einem Pass/Fail-Test wird, wurden thresholds definiert, welche nicht unter- bzw. übertroffen werden dürfen. So müssen mindesten 95% eine Antwortzeit von unter 500 ms haben und eine Request-Fehlerrate von über 1% darf nicht überschritten werden.
+
 
 ## Pipeline
 
