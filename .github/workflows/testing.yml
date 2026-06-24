@@ -110,12 +110,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Make healthcheck-wait.sh script executable
-        run: chmod +x tests/healthcheck-wait.sh
       - name: Start stack
         run: docker compose up opencloud -d
-      - name: Wait for stack health
-        run: tests/healthcheck-wait.sh
+      - name: Wait for stack
+        run: sleep 30
       - name: Make preparation scripts executable
         run: chmod -R +x tests/load/scripts/
       - name: Prepare for get-file load test
@@ -124,3 +122,5 @@ jobs:
         run: k6 run tests/load/get-file.js
       - name: Stop stack
         run: docker compose down
+      - name: Wait for stack
+        run: sleep 30
