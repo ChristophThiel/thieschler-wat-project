@@ -70,6 +70,26 @@ export const dummyUserStore = new Map<string, User>([
       password: '12345678',
       email: 'maxtesting@opencloud.eu'
     }
+  ],
+  [
+    'christoph',
+    {
+      id: 'christoph',
+      username: 'christoph',
+      displayName: 'Unc',
+      password: 'asdf',
+      email: 'christoph.thiel@test.com'
+    }
+  ],
+  [
+    'michel',
+    {
+      id: 'michel',
+      username: 'michel',
+      displayName: 'Chessking',
+      password: 'asdf',
+      email: 'michel.tischler@test.com'
+    }
   ]
 ])
 

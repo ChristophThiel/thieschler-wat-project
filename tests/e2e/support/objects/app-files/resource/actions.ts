@@ -829,6 +829,7 @@ export type ActionViaType =
   | 'BATCH_ACTION'
   | 'SINGLE_SHARE_VIEW'
   | 'PREVIEW_TOPBAR'
+  | 'CONTEXT_MENU'
 
 export interface downloadResourcesArgs {
   page: Page
@@ -904,6 +905,17 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
       await page.locator(appBarDownloadFileButton).click()
       const download = await downloadPromise
       downloads.push(download)
+      break
+
+    case 'CONTEXT_MENU':
+      const contextMenuPromise = page.locator('button[aria-label="Show context menu"]').waitFor()
+      await page.locator('button[aria-label="Show context menu"]').click()
+      await contextMenuPromise
+
+      const contextMenuDownloadPromise = page.waitForEvent('download')
+      await page.locator('button[aria-label=Download]').nth(1).click()
+      const contextMenuDownload = await contextMenuDownloadPromise
+      downloads.push(contextMenuDownload)
       break
   }
 

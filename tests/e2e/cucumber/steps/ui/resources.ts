@@ -108,7 +108,7 @@ When(
 )
 
 When(
-  /^"([^"]*)" downloads the following resource(?:s)? using the (sidebar panel|batch action|preview topbar)$/,
+  /^"([^"]*)" downloads the following resource(?:s)? using the (sidebar panel|batch action|preview topbar|context menu)$/,
   async function (this: World, stepUser: string, actionType: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
@@ -529,6 +529,9 @@ export const processDownload = async (
       case 'preview topbar':
         via = 'PREVIEW_TOPBAR'
         break
+      case 'context menu':
+        via = "CONTEXT_MENU"
+        break
       default:
         break
     }
@@ -543,7 +546,7 @@ export const processDownload = async (
       downloadedResources.push(download.suggestedFilename())
     })
 
-    if (actionType === 'sidebar panel' || actionType === 'preview topbar') {
+    if (actionType === 'sidebar panel' || actionType === 'preview topbar' || actionType === 'context menu') {
       expect(downloads.length).toBe(files.length)
       for (const resource of files) {
         if (resource.type === 'file') {
