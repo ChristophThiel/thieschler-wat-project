@@ -113,3 +113,5 @@ jobs:
         run: tests/load/scripts/prepare-get-file.sh
       - name: Run load test get-file.js
         run: k6 run --out influxdb=http://localhost:8086/k6 tests/load/get-file.js
+      - name: Run load test get-capabilities.js
+        run: k6 run --out influxdb=http://localhost:8086/k6 tests/load/get-capabilities.js
