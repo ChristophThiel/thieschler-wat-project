@@ -6,7 +6,7 @@ BASE_URL="https://host.docker.internal:9200"
 USER="dennis"
 PASS="demo"
 
-curl -k -X PUT "$BASE_URL/dav/files/$USER/load-test.txt" -u "$USER:$PASS" --data-binary "Hello, World!"
+curl -k -X PUT "$BASE_URL/dav/files/$USER/load-test.txt" -u "$USER:$PASS" --data-binary "Hello, World!" > /dev/null
 
 read FILE_ID DRIVE_ID < <(
   curl -k "$BASE_URL/graph/v1.0/me/drive/root/children" -u "$USER:$PASS" \
