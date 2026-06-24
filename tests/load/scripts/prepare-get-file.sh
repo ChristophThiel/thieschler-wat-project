@@ -6,8 +6,10 @@ BASE_URL="https://host.docker.internal:9200"
 USER="dennis"
 PASS="demo"
 
-curl -k -X PUT "$BASE_URL/dav/files/$USER/load-test.txt" -u "$USER:$PASS" --data-binary "Hello, World!"
+echo "Create load-test.txt"
+curl -k -X PUT "$BASE_URL/dav/files/$USER/load-test.txt" -u "$USER:$PASS" --data-binary "Hello, World!" > /dev/null
 
+echo "Get file id and drive id"
 read FILE_ID DRIVE_ID < <(
   curl -k "$BASE_URL/graph/v1.0/me/drive/root/children" -u "$USER:$PASS" \
   | jq -r '.value[] 
@@ -15,8 +17,8 @@ read FILE_ID DRIVE_ID < <(
     | "\(.id) \(.parentReference.driveId)"'
 )
 
-echo $FILE_ID
-echo $DRIVE_ID
+echo "File ID: $FILE_ID"
+echo "Drive ID: $DRIVE_ID"
 
 SHARE_URL=$(curl -k -X POST -s \
   "$BASE_URL/graph/v1beta1/drives/$DRIVE_ID/items/$FILE_ID/createLink" \

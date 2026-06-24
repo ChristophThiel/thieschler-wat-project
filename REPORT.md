@@ -10,15 +10,13 @@ Die Anwendung verfügt bereits über eine ausführliche Infrastruktur und Sammlu
 
 Die genaue Erklärung zu der vorhandenen Infrastruktur kann in der [Dokumentation von OpenCloud](https://docs.opencloud.eu/docs/dev/web/testing/) gefunden werden. Der Fokus von diesem Dokument bergrenzt sich rein auf die selbsterbrachte Leistung.
 
-## Technologien
-
 ## Ermittlung der Test Coverage
 
 Da die Anwendung bereits über Tests verfügt, wurde die Coverage ermittelt. Dabei wurde der Befehl `pnpm test:unit` um `--coverage` erweitert. Aus dem Bericht wurden dann Dateien mit wenig Abdeckung ausgewählt.
 
 ## Unit Tests
 
-Ausführung erfolgt durch `pnpm test:unit`. Es wurde die Arrange-Act-Assert Struktur eingehalten.
+Ausführung erfolgt durch `pnpm test:unit:wat`. Es wurde die Arrange-Act-Assert Struktur eingehalten.
 
 ### Technologien
 
@@ -67,7 +65,7 @@ Da diese Funktion mit `querySelectorAll` arbeitet, wurde hier der Rückgabewert 
 
 ## Integration Tests
 
-Ausführung erfolgt durch `pnpm test:integration`. Es wurde die Arrange-Act-Assert Struktur eingehalten.
+Ausführung erfolgt durch `pnpm test:integration:wat`. Es wurde die Arrange-Act-Assert Struktur eingehalten.
 
 Die Anwendung besitzt keine Integration Tests, wodurch die notwendige Infrastruktur eigenständig aufgesetzt wurde. Zuerst wurde unter `tests` ein neuer Ordner `integration` erstellt. Dieser beinhaltet zum einen Testdaten, aber auch die Konfiguration, welche beim Ausführen verwendet wird.
 
@@ -75,7 +73,6 @@ Die Anwendung besitzt keine Integration Tests, wodurch die notwendige Infrastruk
 
 - vitest
 - Docker
-- GitHub Actions
 
 ### dav.spec.ts
 
@@ -85,7 +82,29 @@ Damit diese Tests die tatsächliche Kommunikation prüft, wird ein einfacher Web
 
 ## E2E Tests
 
+Ausführung erfolgt durch `pnpm test:e2e:wat:<BROWSER>`. Die Browser Chromium, Firefox und Webkit stehen zur Auswahl.
+
+### Technologien
+
+- cucumber
+- Playwright
+
+### download-extended.feature
+
+Dieses in Gherkin verfasste Feature testet das Herunterladen einer Resource über das Kontextmenü, sowie das Herunterladen einer fehlenden Resource.
+
 ## Load Tests
+
+Ausführung erfolgt durch `k6 run tests/load/*.js`.
+
+### Technologien
+
+- k6
+- Grafana
+
+### get-file.js
+
+Bei diesem Load Test wird zuerst das Skript tests/load/scripts/prepare-get-file.sh ausgeführt. Dieses Skript stellt sicher, dass alles notwendige für den Test bereit ist. Zuerst wird eine Datei beim Benutzer "Dennis" angelegt. Diese erstellte Datei wird dann über einen Link öffentlich geteilt. Auf diesen Link schickt dann k6 die Requests.
 
 ## Pipeline
 
@@ -99,9 +118,13 @@ Diese sind:
 
 Die Pipeline `testing.yml` verfügt über mehrere Jobs:
 
-- `unit` für Unit Tests
-- `integration` für Integration Tests
+- `unit`
+- `integration`
+- `e2e`
+- `load`
 
 Jeder dieser Jobs zieht sich den zu testenden Quellcode, installiert die Abhängigkeiten mit `pnpm` und führt den jeweiligen Befehl aus.
 
 Der Job `integration` setzt dazu noch Docker Container auf, welche für die Ausführung notwendig sind.
+
+Die Jobs `e2e` und `load` benötigen beiden den vollständigen OpenCloud Stack, welcher im vorhinein gestartet werden muss

@@ -2,8 +2,12 @@ import http from 'k6/http'
 import { check, sleep } from 'k6'
 
 export const options = {
-  vus: 1,
-  iterations: 10,
+  stages: [
+    { duration: '10s', target: 10 },
+    { duration: '20s', target: 50 },
+    { duration: '30s', target: 50 },
+    { duration: '10s', target: 0 }
+  ],
   insecureSkipTLSVerify: true
 }
 
