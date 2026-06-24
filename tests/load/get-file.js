@@ -7,7 +7,8 @@ export const options = {
     { duration: '20s', target: 50 },
     { duration: '30s', target: 50 },
     { duration: '10s', target: 0 }
-  ]
+  ],
+  insecureSkipTLSVerify: true
 }
 
 export default function () {
