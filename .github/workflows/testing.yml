@@ -108,7 +108,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Start stack
-        run: docker compose up --force-recreate opencloud -d
+        run: docker compose up opencloud -d
       - name: Wait for stack
         run: sleep 15
       - name: Make preparation scripts executable
