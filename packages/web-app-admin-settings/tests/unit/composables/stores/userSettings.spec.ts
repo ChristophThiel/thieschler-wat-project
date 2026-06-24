@@ -41,6 +41,7 @@ describe.runIf(process.env.WAT === 'true')('useUserSettingsStore', () => {
         }
       })
     })
+
     it('merges into an existing user instead of duplicating', () => {
       getWrapper({
         setup: (instance) => {
