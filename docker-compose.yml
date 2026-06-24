@@ -127,6 +127,11 @@ services:
       - ./dev/docker/opencloud/app-registry.yaml:/etc/opencloud/app-registry.yaml
       - opencloud-config:/etc/opencloud
       - ${OC_WEB_CONFIG:-./dev/docker/opencloud.web.config.json}:/web/config.json:ro
+    healthcheck:
+      test: ['CMD', 'curl', '-k', '-f', 'https://localhost:9200']
+      interval: 5s
+      timeout: 3s
+      retries: 20
 
   opencloud-federated:
     <<: *opencloud-service

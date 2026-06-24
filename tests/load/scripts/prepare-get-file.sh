@@ -6,8 +6,6 @@ BASE_URL="https://host.docker.internal:9200"
 USER="dennis"
 PASS="demo"
 
-ping host.docker.internal
-
 echo "Create load-test.txt"
 curl -k -X PUT "$BASE_URL/dav/files/$USER/load-test.txt" -u "$USER:$PASS" --data-binary "Hello, World!" > /dev/null
 
