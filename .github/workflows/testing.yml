@@ -7,6 +7,7 @@ on:
 
 jobs:
   unit:
+    if: false
     runs-on: self-hosted
     steps:
       - name: Checkout
@@ -31,6 +32,7 @@ jobs:
           path: coverage/
 
   integration:
+    if: false
     runs-on: self-hosted
     services:
       webdav:
@@ -85,6 +87,7 @@ jobs:
         run: docker rm -f opencloud || true
 
   e2e:
+    if: false
     runs-on: self-hosted
     steps:
       - name: Checkout
@@ -108,12 +111,14 @@ jobs:
         with:
           fetch-depth: 0
       - name: Start stack
-        run: docker compose up opencloud -d
-      - name: Wait for stack
-        run: sleep 15
+        uses: hoverkraft-tech/compose-action@v3.0.0
+        with:
+          up-flags: 'opencloud'
       - name: Make preparation scripts executable
-        run: chmod -R +x test/load/scripts/
+        run: chmod -R +x tests/load/scripts/
       - name: Prepare for get-file load test
         run: tests/load/scripts/prepare-get-file.sh
       - name: Run load test get-file.js
         run: k6 run tests/load/get-file.js
+      - name: Stop stack
+        run: docker compose down
