@@ -33,7 +33,7 @@ import { isLocationTrashActive } from '@opencloud-eu/web-pkg'
 import { isProjectSpaceResource, ShareResource, SpaceResource } from '@opencloud-eu/web-client'
 import { useFileActionsShowShares } from '../../../../../src/composables/actions/files/useFileActionsShowShares'
 
-describe('useFileActionsShowShares', () => {
+describe.runIf(process.env.WAT === 'true')('useFileActionsShowShares', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })

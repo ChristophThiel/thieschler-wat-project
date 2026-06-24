@@ -23,7 +23,7 @@ function createKeyActions(): KeyboardActions {
   } as unknown as KeyboardActions
 }
 
-describe('handleShiftClickAction', () => {
+describe.runIf(process.env.WAT === 'true')('handleShiftClickAction', () => {
   it('selects range between anchor and clicked item', async () => {
     // Arrange
     const viewMode = ref(FolderViewModeConstants.name.table)

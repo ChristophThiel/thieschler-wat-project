@@ -94,7 +94,7 @@ describe('useKeyboardFileNavigation', () => {
     expect(selectionStates.every((state) => state.length > 0)).toBe(true)
   })
 
-  it.each([
+  it.runIf(process.env.WAT === 'true').each([
     {
       name: 'select files on shift up',
       start: '5',

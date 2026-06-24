@@ -15,12 +15,19 @@ jobs:
           fetch-depth: 0
       - name: Install dependencies
         run: pnpm install
-      - name: Run unit tests
+      - name: Run preexisting unit tests
         run: pnpm test:unit
       - name: Upload coverage
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.sha }}
+          name: ${{ github.sha }}-preexisting
+          path: coverage/
+      - name: Run extended unit tests
+        run: pnpm test:unit:wat
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.sha }}-extended
           path: coverage/
 
   integration:
@@ -72,19 +79,26 @@ jobs:
         env:
           OCS_BASE_URL: https://localhost:19200
           NODE_TLS_REJECT_UNAUTHORIZED: '0'
-        run: pnpm test:integration
+        run: pnpm test:integration:wat
       - name: Stop OpenCloud backend
         if: always()
         run: docker rm -f opencloud || true
 
   e2e:
-    if: false # Disabled until e2e tests are implemented
     runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Install dependencies
+        run: pnpm install
+      - name: Run E2E tests for chromium
+        run: pnpm test:e2e:wat:chromium 'tests/e2e/cucumber/**/*.feature'
+      - name: Run E2E tests for firefox
+        run: pnpm test:e2e:wat:firefox 'tests/e2e/cucumber/**/*.feature'
+      - name: Run E2E tests for webkit
+        run: pnpm test:e2e:wat:webkit 'tests/e2e/cucumber/**/*.feature'
 
   load:
     if: false # Disabled until load tests are implemented

@@ -54,7 +54,7 @@ vi.mock('@opencloud-eu/web-pkg', () => ({
   })
 }))
 
-describe('useFileActionsCreateSpaceFromResource', () => {
+describe.runIf(process.env.WAT === 'true')('useFileActionsCreateSpaceFromResource', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })

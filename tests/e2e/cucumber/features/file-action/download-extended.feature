@@ -1,3 +1,4 @@
+@wat
 Feature: Download extended
   As a user
   I want to download resources

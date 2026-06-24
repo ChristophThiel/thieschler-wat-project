@@ -4,7 +4,7 @@ import { User } from '@opencloud-eu/web-client/graph/generated'
 import { getComposableWrapper } from '@opencloud-eu/web-test-helpers'
 import { createPinia, setActivePinia } from 'pinia'
 
-describe('useUserSettingsStore', () => {
+describe.runIf(process.env.WAT === 'true')('useUserSettingsStore', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
   })
