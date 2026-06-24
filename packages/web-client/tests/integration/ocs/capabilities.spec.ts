@@ -6,8 +6,6 @@ describe('ocs capabilities', () => {
   const client = axios.create({
     headers: { Authorization: 'Basic ' + Buffer.from('admin:admin').toString('base64') },
     // Force axios to use Node's http adapter instead of happy-dom's XMLHttpRequest.
-    // happy-dom's request path ignores NODE_TLS_REJECT_UNAUTHORIZED, which breaks
-    // against the backend's self-signed cert. The http adapter respects the agent below.
     adapter: 'http',
     httpsAgent: new https.Agent({ rejectUnauthorized: false })
   })
